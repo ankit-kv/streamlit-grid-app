@@ -6,7 +6,7 @@ from streamlit_sortables import sort_items
 st.title("🧱 Custom Image Grid Maker")
 
 # Upload section
-uploaded_files = st.file_uploader("Upload Images", accept_multiple_files=True, type=["png", "jpg", "jpeg"])
+uploaded_files = st.file_uploader("Upload Images", accept_multiple_files=True, type=["png", "jpg", "jpeg", "JPG", "bmp"])
 if not uploaded_files:
     st.stop()
 
