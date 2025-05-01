@@ -125,7 +125,7 @@ for idx, img in enumerate(images):
     grid_img.paste(img, (x, y))
 
 # Display & download
-st.image(grid_img, caption="Generated Grid", use_column_width=True)
+st.image(grid_img, caption="Generated Grid", use_container_width=True)
 
 buf = io.BytesIO()
 grid_img.save(buf, format="PNG")
