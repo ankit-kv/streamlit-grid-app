@@ -1,0 +1,5 @@
+streamlit
+Pillow
+streamlit-sortables
+os
+
