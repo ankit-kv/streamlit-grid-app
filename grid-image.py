@@ -597,12 +597,12 @@ st.image(grid_img, caption="Your Enhanced Custom Image Grid")
 st.markdown("### 📥 Download Options")
 
 # NEW: PDF generation function
-def create_pdf_with_grid(grid_img, filename="image_grid.pdf", page_size="A4"):
-    """Create PDF with the grid image"""
+def create_pdf_with_grid(grid_img, filename="image_grid.pdf"):
+    """Create PDF where the page size matches the image size exactly"""
     from reportlab.pdfgen import canvas
-    from reportlab.lib.pagesizes import letter, A4, landscape
     from reportlab.lib.utils import ImageReader
     import io
+    from PIL import Image
     
     # Convert PIL image to format that reportlab can use
     img_buffer = io.BytesIO()
@@ -615,40 +615,20 @@ def create_pdf_with_grid(grid_img, filename="image_grid.pdf", page_size="A4"):
         grid_img.save(img_buffer, format='PNG')
     img_buffer.seek(0)
     
-    # Create PDF
-    pdf_buffer = io.BytesIO()
-    
-    # Set page size
-    if page_size == "A4":
-        page_width, page_height = A4
-    elif page_size == "A4 Landscape":
-        page_width, page_height = landscape(A4)
-    else:  # Letter
-        page_width, page_height = letter
-    
-    c = canvas.Canvas(pdf_buffer, pagesize=(page_width, page_height))
-    
-    # Calculate scaling to fit image on page with margins
-    margin = 50
-    available_width = page_width - 2 * margin
-    available_height = page_height - 2 * margin
-    
+    # Get image dimensions (pixels treated as points)
     img_width, img_height = grid_img.size
-    scale_x = available_width / img_width
-    scale_y = available_height / img_height
-    scale = min(scale_x, scale_y, 1.0)  # Don't scale up
     
-    # Calculate centered position
-    scaled_width = img_width * scale
-    scaled_height = img_height * scale
-    x = (page_width - scaled_width) / 2
-    y = (page_height - scaled_height) / 2
+    # Create PDF with page size equal to image size
+    pdf_buffer = io.BytesIO()
+    c = canvas.Canvas(pdf_buffer, pagesize=(img_width, img_height))
     
-    # Draw image
-    c.drawImage(ImageReader(img_buffer), x, y, scaled_width, scaled_height)
+    # Draw image to exactly fill the page
+    c.drawImage(ImageReader(img_buffer), 0, 0, width=img_width, height=img_height)
     c.save()
+    
     pdf_buffer.seek(0)
     return pdf_buffer.getvalue()
+
 
 col10, col11, col12, col13 = st.columns(4)
 
@@ -951,7 +931,7 @@ Developed by Ankit Kumar Verma
 - ⚡ Quick preset configurations
 - 📊 Advanced grid analysis
 
-This tool is open-source. Find the code on [GitHub](https://github.com/your-repo)
+This tool is open-source. Find the code on [GitHub](https://github.com/ankit-kv/streamlit-grid-app/tree/main)
 """)
 
 st.markdown("---")
