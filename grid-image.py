@@ -674,14 +674,6 @@ with col12:
         mime="image/png"
     )
 
-with col13:
-    # NEW: PDF download options
-    pdf_page_size = st.selectbox(
-        "PDF Page Size",
-        ["A4", "A4 Landscape", "Letter"],
-        index=0,
-        key="pdf_page_size"
-    )
 
 # PDF download button (separate row for better layout)
 col_pdf1, col_pdf2, col_pdf3 = st.columns([1, 1, 2])
@@ -689,7 +681,7 @@ with col_pdf1:
     if st.button("📄 Generate PDF"):
         with st.spinner("Creating PDF..."):
             try:
-                pdf_data = create_pdf_with_grid(grid_img, page_size=pdf_page_size)
+                pdf_data = create_pdf_with_grid(grid_img)
                 st.session_state['pdf_data'] = pdf_data
                 st.success("PDF generated successfully!")
             except Exception as e:
